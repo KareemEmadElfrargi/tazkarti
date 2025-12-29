@@ -15,12 +15,7 @@ public class AppUserController {
     private final AppUserService appUserService;
 
     public ResponseEntity<?> registerUser(@RequestBody AppUser appUser) {
-
-        try{
             AppUser savedUser = appUserService.registerUser(appUser);
             return ResponseEntity.ok(savedUser);
-        }catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 }
