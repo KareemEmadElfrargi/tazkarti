@@ -1,6 +1,7 @@
 package com.sport.tazkarti.controller;
 
 import com.sport.tazkarti.model.AppUser;
+import com.sport.tazkarti.model.dto.LoginRequest;
 import com.sport.tazkarti.model.dto.RegisterRequest;
 import com.sport.tazkarti.model.dto.UserResponse;
 import com.sport.tazkarti.service.AppUserService;
@@ -22,5 +23,9 @@ public class AppUserController {
     public ResponseEntity<?> registerUser(@RequestBody @Valid RegisterRequest request) {
             UserResponse savedUser = appUserService.registerUser(request);
             return ResponseEntity.ok(savedUser);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody @Valid LoginRequest request) {
+        return ResponseEntity.ok(appUserService.login(request));
     }
 }

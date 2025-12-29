@@ -1,14 +1,20 @@
 package com.sport.tazkarti.service;
 
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import com.sport.tazkarti.config.JwtService;
 import com.sport.tazkarti.exception.DuplicateRecordException;
 import com.sport.tazkarti.mapper.UserMapper;
 import com.sport.tazkarti.model.AppUser;
+import com.sport.tazkarti.model.dto.LoginRequest;
+import com.sport.tazkarti.model.dto.LoginResponse;
 import com.sport.tazkarti.model.dto.RegisterRequest;
 import com.sport.tazkarti.model.dto.UserResponse;
 import com.sport.tazkarti.repository.AppUserRepository;
+
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +22,7 @@ public class AppUserService {
     private final AppUserRepository appUserRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
     public UserResponse registerUser(RegisterRequest request) {
 
@@ -30,8 +37,23 @@ public class AppUserService {
         appUser.setEmail(request.email());
         appUser.setPassword(passwordEncoder.encode(request.password()));
         appUser.setFanId(request.fanId());
+        appUser.setUsername(request.username());
+        
         appUserRepository.save(appUser);
 
         return userMapper.toDtoResponse(appUser);
+    }
+
+    public LoginResponse login(LoginRequest request) {
+        AppUser user = appUserRepository.findByEmail(request.email())
+                .orElseThrow(()-> new BadCredentialsException("Invalid email or password"));
+
+        if (!passwordEncoder.matches(request.password(),user.getPassword())) {
+            throw new BadCredentialsException("Invalid Email or Password");
+        }
+
+        String token =  jwtService.generateToken(user.getEmail());
+
+        return new LoginResponse(token,user.getEmail(),user.getFanId());
     }
 }
