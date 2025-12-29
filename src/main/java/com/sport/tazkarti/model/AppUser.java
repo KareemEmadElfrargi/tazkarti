@@ -1,5 +1,6 @@
 package com.sport.tazkarti.model;
 
+import com.sport.tazkarti.model.enums.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,5 +29,8 @@ public class AppUser {
     @Column(unique = true, nullable = false)
     private String fanId;
     private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
 }

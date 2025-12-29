@@ -26,7 +26,7 @@ public class ApplicationConfig {
                         .builder()
                         .username(user.getEmail())
                         .password(user.getPassword())
-                        .roles("USER") //Default
+                        .roles(user.getRole().name())
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
