@@ -34,7 +34,7 @@ public class GlobalExceptionHandler  {
             errors.put(fieldName, errorMessage);
         });
         ApiError apiError = new ApiError(
-                HttpStatus.BAD_REQUEST.value(),
+                HttpStatus.CONFLICT.value(), // 409
                 "Validation Failed",
                 errors
         );
