@@ -23,7 +23,8 @@ public class UserMapper {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getFanId()
+                user.getFanId(),
+                user.getRole() != null ? user.getRole().name() : "N/A"
         );
     }
 

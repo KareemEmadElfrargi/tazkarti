@@ -4,5 +4,6 @@ public record UserResponse(
         Long id,
         String username,
         String email,
-        String fanId
+        String fanId,
+        String role
 ) {}
