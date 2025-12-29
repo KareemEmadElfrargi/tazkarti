@@ -1,6 +1,7 @@
 package com.sport.tazkarti.service;
 
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -18,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class AppUserService {
+public class UserService {
     private final AppUserRepository appUserRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
@@ -55,5 +56,11 @@ public class AppUserService {
         String token =  jwtService.generateToken(user.getEmail());
 
         return new LoginResponse(token,user.getEmail(),user.getFanId());
+    }
+
+    public UserResponse getUserByEmail(String email) {
+        AppUser user = appUserRepository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return userMapper.toDtoResponse(user);
     }
 }
