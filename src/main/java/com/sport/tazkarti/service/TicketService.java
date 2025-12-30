@@ -32,7 +32,7 @@ public class TicketService {
         AppUser user = appUserRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
-        Match match = matchRepository.findById(request.matchId())
+        Match match = matchRepository.findByIdWithLock(request.matchId())
                 .orElseThrow(() -> new ResourceNotFoundException("Match not found"));
 
         if (ticketRepository.existsByUserIdAndMatchId(user.getId(), match.getId())) {
