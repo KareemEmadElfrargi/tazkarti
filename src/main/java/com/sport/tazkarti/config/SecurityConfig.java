@@ -26,10 +26,8 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/users/register", "/api/users/login", "/error").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/stadiums").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/stadiums").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/teams").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/teams").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/stadiums", "/api/teams", "/api/matches").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/stadiums","/api/teams", "/api/matches").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
