@@ -15,12 +15,12 @@ import java.util.Map;
 public class GlobalExceptionHandler  {
 
     @ExceptionHandler(DuplicateRecordException.class)
-    public ResponseEntity<Map<String, String>> handleDuplicateRecord(DuplicateRecordException ex) {
-        Map<String, String> errorResponse = new HashMap<>();
-        errorResponse.put("error", "Duplicate Data");
-        errorResponse.put("message", ex.getMessage());
-        errorResponse.put("status", "400");
-        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ApiError> handleDuplicateRecord(DuplicateRecordException ex) {
+        ApiError apiError = new ApiError(
+                HttpStatus.CONFLICT.value(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.CONFLICT);
     }
 
 
@@ -40,4 +40,34 @@ public class GlobalExceptionHandler  {
         );
 
         return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
-    }}
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiError> handleResourceNotFound(ResourceNotFoundException ex) {
+        ApiError apiError = new ApiError(
+                HttpStatus.NOT_FOUND.value(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiError> handleIllegalArgument(IllegalArgumentException ex) {
+        ApiError apiError = new ApiError(
+                HttpStatus.BAD_REQUEST.value(),
+                ex.getMessage()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiError> handleGlobalException(Exception ex) {
+        ex.printStackTrace();
+
+        ApiError apiError = new ApiError(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "An unexpected error occurred: " + ex.getMessage()
+        );
+        return new ResponseEntity<>(apiError, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+}
