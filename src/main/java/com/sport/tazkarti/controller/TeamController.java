@@ -1,7 +1,10 @@
 package com.sport.tazkarti.controller;
 
 import com.sport.tazkarti.model.Team;
+import com.sport.tazkarti.model.dto.TeamRequest;
+import com.sport.tazkarti.model.dto.TeamResponse;
 import com.sport.tazkarti.service.TeamService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,13 +18,13 @@ public class TeamController {
     private final TeamService teamService;
 
     @GetMapping
-    public ResponseEntity<List<Team>> getAllTeams() {
+    public ResponseEntity<List<TeamResponse>> getAllTeams() {
         return ResponseEntity.ok(teamService.getAllTeams());
     }
 
     @PostMapping
-    public ResponseEntity<Team> addTeam(@RequestBody Team team) {
-        return ResponseEntity.ok(teamService.addTeam(team));
+    public ResponseEntity<TeamResponse> addTeam(@Valid @RequestBody TeamRequest request) {
+        return ResponseEntity.ok(teamService.addTeam(request));
     }
 
 }
