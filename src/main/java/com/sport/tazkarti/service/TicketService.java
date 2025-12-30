@@ -3,6 +3,7 @@ package com.sport.tazkarti.service;
 
 import com.sport.tazkarti.exception.DuplicateRecordException;
 import com.sport.tazkarti.exception.ResourceNotFoundException;
+import com.sport.tazkarti.mapper.TicketMapper;
 import com.sport.tazkarti.model.AppUser;
 import com.sport.tazkarti.model.Match;
 import com.sport.tazkarti.model.Ticket;
@@ -15,12 +16,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TicketService {
     private final TicketRepository ticketRepository;
     private final AppUserRepository appUserRepository;
     private final MatchRepository matchRepository;
+
+    private final TicketMapper ticketMapper;
 
     @Transactional
     public BookingResponse bookTicket(BookingRequest request, String userEmail){
@@ -43,14 +48,11 @@ public class TicketService {
         ticket.setMatch(match);
         ticket.setSeatNumber((int)(soldTickets+1));
         Ticket savedTicket = ticketRepository.save(ticket);
-        return new BookingResponse(
-                savedTicket.getTicketCode(),
-                user.getFanId(),
-                match.getHomeTeam().getName() + " vs " + match.getAwayTeam().getName(),
-                savedTicket.getMatch().getStadium().getName(),
-                savedTicket.getSeatNumber(),
-                savedTicket.getBookingDate()
-        );
+        return ticketMapper.toResponse(savedTicket);
+    }
+    public List<BookingResponse> getTickets(String email){
+        return ticketRepository.findAllByUserEmail(email)
+                .stream().map(ticketMapper::toResponse).toList();
     }
 
 }

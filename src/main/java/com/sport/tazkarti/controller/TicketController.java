@@ -7,10 +7,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 
@@ -23,6 +20,10 @@ public class TicketController {
     @PostMapping
     public ResponseEntity<BookingResponse> bookTicket(@Valid @RequestBody BookingRequest bookingRequest, Principal principal){
         return ResponseEntity.ok(ticketService.bookTicket(bookingRequest,principal.getName()));
+    }
+    @GetMapping
+    public ResponseEntity<?> getTickets(Principal principal){
+        return ResponseEntity.ok(ticketService.getTickets(principal.getName()));
     }
 
 }
