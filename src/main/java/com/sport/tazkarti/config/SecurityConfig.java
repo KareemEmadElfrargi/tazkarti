@@ -2,6 +2,7 @@ package com.sport.tazkarti.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -27,6 +28,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register", "/api/users/login", "/error").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/stadiums").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/stadiums").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/teams").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/teams").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
