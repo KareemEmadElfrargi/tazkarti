@@ -4,9 +4,8 @@ import java.time.LocalDateTime;
 
 public record BookingResponse(
         String ticketCode,
-        String fanId,   //So he knows it's in his name
-        String matchInfo,
-        String stadium,
+        String fanId,
+        MatchResponse match,
         Integer seatNumber,
         LocalDateTime bookingDate
 ) {}

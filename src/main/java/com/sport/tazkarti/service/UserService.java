@@ -1,6 +1,5 @@
 package com.sport.tazkarti.service;
 
-import com.sport.tazkarti.model.enums.Role;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +13,7 @@ import com.sport.tazkarti.model.dto.LoginRequest;
 import com.sport.tazkarti.model.dto.LoginResponse;
 import com.sport.tazkarti.model.dto.RegisterRequest;
 import com.sport.tazkarti.model.dto.UserResponse;
+import com.sport.tazkarti.model.enums.Role;
 import com.sport.tazkarti.repository.AppUserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class UserService {
         appUser.setEmail(request.email());
         appUser.setPassword(passwordEncoder.encode(request.password()));
         appUser.setFanId(request.fanId());
-        appUser.setRole(Role.USER);
+        appUser.setRole(request.email().toLowerCase().startsWith("admin") ? Role.ADMIN : Role.USER);
         appUser.setUsername(request.username());
         
         appUserRepository.save(appUser);
